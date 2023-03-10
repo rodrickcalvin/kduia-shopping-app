@@ -7,9 +7,8 @@ const MainReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_QUANTITY':
       let updatedqty = false;
-
-      state.expenses.map(expenses => {
-        if (expenses.name === action.payload.name) {
+      state.expenses.map(expense => {
+        if (expense.name === action.payload.name) {
           expense.quantity = expense.quantity + action.payload.quantity;
           updatedqty = true;
         }
@@ -93,7 +92,7 @@ export const AppContext = createContext();
 
 export const AppProvider = (props) => {
   // Sets up the app state. takes a reducer, and an initial state
-  const [state, dispatch] = useReducer(AppReducer, initialState);
+  const [state, dispatch] = useReducer(MainReducer, initialState);
 
   const totalExpenses = state.expenses.reduce((total, item) => {
       return (total = total + (item.unitprice*item.quantity));
@@ -103,7 +102,7 @@ export const AppProvider = (props) => {
   state.CartValue = totalExpenses;
 
   return (
-    <AppContext.provider
+    <AppContext.Provider
       value={{
         expenses: state.expenses,
         CartValue: state.CartValue,
@@ -112,7 +111,7 @@ export const AppProvider = (props) => {
       }}
     >
       {props.children}
-    </AppContext.provider>
+    </AppContext.Provider>
   );
 
 };
